@@ -1,0 +1,28 @@
+name: JMeter Tests
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install JMeter
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jmeter
+
+    - name: Run JMeter tests
+      run: |
+        jmeter -n -t mytest.jmx -l mytest.jtl
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: mytest.jtl
